@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/bootstrap.min.css" />
+    <style type="text/css">
+        p.before-code {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body style="padding-top: 3.5rem;">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">WS1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="#">Help</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Websocket Tutorial 1</h1>
+        <h2><small class="text-muted">Cheat Page</small></h2>
+        <hr />
+        <p class="lead">
+            Before you cheat, here's some documentation that may help you! Some of it was used to write this Workshop task:
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/en/docs/Web/API/WebSocket">
+                        The Websocket Object - Mozilla
+                    </a>
+                    <small class="font-italic">- Very simplistic overview of method calls available on the Websocket object</small>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications">
+                        Writing Websocket Applications - Mozilla
+                    </a>
+                    <small class="font-italic">- Another Mozilla resource on how to use the Websocket object</small>
+                </li>
+                <li>
+                    <a href="http://socketo.me/docs/wamp">The WAMP Spec Interface</a>
+                    <small class="font-italic">- The Ratchet WampServerInterface methods and what they're for (we're only use some of them for now)</small>
+                </li>
+            </ul>
+        </p>
+        <hr />
+        <p>
+            <div id="accordion" role="tablist">
+                <div class="card">
+                    <div class="card-header list-group-item-success" role="tab" id="headingOne">
+                        <h5 class="mb-0">
+                            <span class="badge badge-success align-text-bottom">#1 - Spoiler</span>
+                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Clicking Connect should open the Websocket Connection
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <p class="before-code">
+                                Look in <code class="highlighter-rouge">web/assets/websockets.js</code> for the following code:
+                            </p>
+<pre><code>
+    $('#ws-open').on('click', function(e) {
+
+    });
+</code></pre>
+                            <p class="before-code">
+                                This function is triggered when we click the button with the id <code class="highlighter-rouge">ws-open</code>.
+                                Within here, create a new Websocket object:
+                            </p>
+<pre><code>
+    conn = new WebSocket('ws://localhost:1338');
+</code></pre>
+                            <p>
+                                Here we could use ws:// or wss:// which stands for Websocket Secure.
+
+                                When we click on the connect button, a new Websocket object (and by extension, connection) is
+                                created with the websocket server running on port 1338 within docker. (We forward port 1338 to
+                                the host machine so you can use it there too within the docker-compose configuration).
+                                You can view the official Websocket documentation <a href="https://developer.mozilla.org/en/docs/Web/API/WebSocket">here</a>,
+                                which shows you how to use the Websocket object.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                        <div class="card-header list-group-item-success" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <span class="badge badge-success align-text-bottom">#2 - Spoiler</span>
+                                <a data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    Clicking Send should send() a JSON message to the websocket server
+                                </a>
+                            </h5>
+                        </div>
+
+                        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <p class="before-code">
+                                    Look in <code class="highlighter-rouge">web/assets/websockets.js</code> for the code from Task #3:
+                                </p>
+<pre><code>
+    $('#ws-send').on('click', function(e) {
+
+    });
+</code></pre>
+                                <p>
+                                    Within this function, we already get the text within the input box we want to send. According to
+                                    the <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications">Websocket example documentation from Mozilla</a>,
+                                    Websocket objects have a <code class="highlighter-rouge">send()</code> method on them. This sends
+                                    data from the client to the Websocket Server and hits <code class="highlighter-rouge">onMessage()</code>
+                                    within the event handler.
+                                </p>
+                                <p class="before-code">
+                                    Firstly, within the above code block, add the send method:
+                                </p>
+<pre><code>
+    conn.send(inputText);
+</code></pre>
+                                <p>
+                                    Secondly, take a look in the EventHandler class: <code class="highlighter-rouge">src/EventHandler.php</code>.
+                                    In the <code class="highlighter-rouge">onMessage()</code> method, add <code class="highlighter-rouge">echo $msg;</code>.
+                                    This will simply print any messages to SDOUT, but normally you would do something more sophisticated
+                                    with this message; for example cause some code to be executed depending on what was sent in.
+                                </p>
+                                <p>
+                                    Another use-case for sending messages this way is chat. You could loop around all connections
+                                    currently connected and send the message to them all, thereby creating a very rudimentary chat
+                                    application.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="card">
+                        <div class="card-header list-group-item-success" role="tab" id="headingThree">
+                            <h5 class="mb-0">
+                                <span class="badge badge-success align-text-bottom">#3 - Spoiler</span>
+                                <a data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                    You should send a message from the server to the client on connection. </br >
+                                    Any messages received should be displayed (or appended) in the div #messages
+                                </a>
+                            </h5>
+                        </div>
+
+                        <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <p class="before-code">
+                                    Look in <code class="highlighter-rouge">src/EventHandler</code> for the following code:
+                                </p>
+<pre><code>
+    public function onOpen(ConnectionInterface $conn)
+    {
+    }
+</code></pre>
+                                <p>
+                                    When a connection is opened, caused by creating a new <code class="highlighter-rouge">Websocket</code>
+                                    object in JavaScript with the IP Address and port of this server, <code class="highlighter-rouge">onOpen()</code>
+                                    is triggered with the connection of the user connecting.
+                                </p>
+                                <p>
+                                    The <code class="highlighter-rouge">ConnectionInterface</code> interface has some simple methods
+                                    which you can call on it; one of them being <code class="highlighter-rouge">send()</code>. This
+                                    simple sends some data back to the client, which can be read with <code class="highlighter-rouge">conn.onmessage</code>
+                                    in JavaScript.
+                                </p>
+                                <p class="before-code">
+                                    Firstly, add a call to the send method within <code class="highlighter-rouge">onOpen</code>.
+                                </p>
+<pre><code>
+    $conn->send(json_encode(['hello' => 'world']));
+</code></pre>
+                                <p class="before-code">
+                                    Secondly, within the <code class="highlighter-rouge">$('#ws-open').on('click', function(e) { }</code>
+                                    code in <code class="highlighter-rouge">websockets.js</code>, add the following code:
+                                </p>
+<pre><code>
+    conn.onmessage = function(e) {
+        $('div#messages').html(e.data);
+    };
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                <div class="card">
+    <div class="card-header list-group-item-success" role="tab" id="headingFour">
+        <h5 class="mb-0">
+            <span class="badge badge-success align-text-bottom">#4 - Spoiler</span>
+            <a data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                Clicking Disconnect should close the Websocket Connection
+            </a>
+        </h5>
+    </div>
+
+    <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <p class="before-code">
+                Look in <code class="highlighter-rouge">web/assets/websockets.js</code> for the following code:
+            </p>
+            <pre><code>
+    $('#ws-close').on('click', function(e) {
+
+    });
+</code></pre>
+            <p class="before-code">
+                This function is triggered when we click the button with the id <code class="highlighter-rouge">ws-close</code>.
+                Within here, call close on the Websocket object.
+            </p>
+            <pre><code>
+    conn.close();
+</code></pre>
+        </div>
+    </div>
+</div>
+            </div>
+        </p>
+    </div>
+</div>
+
+<div class="container">
+
+    <hr />
+    <footer>
+        <p class="text-muted">James Mallison - PHPNW 2017</p>
+    </footer>
+</div>
+
+<script type="text/javascript" src="assets/jquery.min.js"></script>
+<script type="text/javascript" src="assets/popper.min.js"></script>
+<script type="text/javascript" src="assets/bootstrap.min.js"></script>
+</body>
+</html>

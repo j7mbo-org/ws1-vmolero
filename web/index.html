@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="assets/bootstrap.min.css" />
+    </head>
+    <body style="padding-top: 3.5rem;">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">WS1</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="help.html">Tasks</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="progress" class="progress" style="width: 100% !important;">
+                <div class="progress-bar progress-bar-animated"></div>
+            </div>
+        </nav>
+
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-3">Websocket Tutorial 1</h1>
+                <h2><small class="text-muted">Connection Basics</small></h2>
+                <p>
+                    The goal of WS1 is to show you how two different calls 'trigger' an already defined function in an
+                    event handler (via the already running event loop and websocket server). This is a very simplistic
+                    and arbitrary example.
+                </p>
+                <p>
+                    If you need any help at any time, you can ask me or look at Help above, but try not to use it too
+                    much as this is an exercise in learning, not just copying and pasting from StackOverflow!
+                </p>
+                <p>
+                    You only need to touch <span class="font-weight-bold">two files</span> to make this all work! These
+                    are: <code class="highlighter-rouge">web/assets/websockets.js</code> and <code class="highlighter-rouge">src/EventHandler.php</code>.
+                </p>
+                <p>
+                    You can access the docker container with:
+                    <code class="highlighter-rouge">
+                        docker exec -i -t $(docker-compose ps | grep 'php' | awk '{print $1}') /bin/bash
+                    </code>
+                </p>
+                <p>
+                    To start the Websocket server within the docker container, run:
+                    <code class="highlighter-rouge">php /appdata/bin/websocket-server.php</code>
+                </p>
+                <hr />
+                <p class="lead">
+                    To successfully complete WS1 you need to complete the tasks below.
+                </p>
+                <p>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-danger">
+                            <span class="badge badge-success">#1</span>
+                            Clicking Connect should open the Websocket Connection (you'll know if this works because the Connect button will be disabled)
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <span class="badge badge-success">#2</span>
+                            Clicking Send should send() a JSON message to the websocket server (to be displayed in terminal, for now)
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <span class="badge badge-success">#3</span>
+                            You should send a message from the server to the client on connection. <br />
+                            Any messages received should be displayed (or appended) in the div #messages
+                        </li>
+                        <li class="list-group-item list-group-item-danger">
+                            <span class="badge badge-success">#4</span>
+                            Clicking Disconnect should close the Websocket Connection
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Connect</h2>
+                    <p>
+                        Clicking #ws-open should create a new Websocket object (and therefore connection).
+                    </p>
+                    <p><a id="ws-open" class="btn btn-primary btn-lg" href="#" role="button">Connect</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Disconnect</h2>
+                    <p>
+                        Clicking #ws-close should close the connection of the Websocket object.
+                    </p>
+                    <p><a id="ws-close" class="btn btn-primary btn-lg disabled" href="#" role="button">Disconnect</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Send Message</h2>
+                    <p>
+                        Clicking #ws-send should send some data to the websocket server. Being able to receive and send messages means we have
+                        bi-directional communication without having to create a new AJAX request each time; it's all over
+                        one TCP connection.
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Send a message..." aria-label="Type here...">
+                            <span class="input-group-btn">
+                                <button id="ws-send" class="btn btn-primary disabled" type="button" style="cursor: pointer;">Send</button>
+                            </span>
+                        </div>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Messages Received</h2>
+                    <p>
+                        Any messages sent from the server should be displayed here.
+                    </p>
+                    <p>
+                    <div id="messages" class="alert alert-primary" role="alert">
+                        There are no messages yet...
+                    </div>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <footer>
+                <p class="text-muted">James Mallison - PHPNW 2017</p>
+            </footer>
+        </div>
+
+        <script type="text/javascript" src="assets/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/wsHook.js"></script>
+        <script type="text/javascript" src="assets/popper.min.js"></script>
+        <script type="text/javascript" src="assets/bootstrap.min.js"></script>
+        <script type="text/javascript" src="assets/websockets.js"></script>
+        <script type="text/javascript" src="assets/verify.min.js"></script>
+    </body>
+</html>
